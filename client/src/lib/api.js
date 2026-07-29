@@ -1,4 +1,4 @@
-const API = '/api';
+const API = 'https://house-of-her-production.up.railway.app/api';
 
 function getToken() {
   return localStorage.getItem('hoh_token');
