@@ -19,13 +19,13 @@ export default function StaffModels() {
   };
 
   const toggleLive = async (id) => {
-    await api(⁠ /models/${id}/live ⁠, { method: 'PATCH' });
+    await api('/models/' + id + '/live', { method: 'PATCH' });
     load();
   };
 
   const deleteModel = async (id, name) => {
-    if (!confirm(⁠ Are you sure you want to permanently delete ${name}? This cannot be undone. ⁠)) return;
-    await api(⁠ /models/${id} ⁠, { method: 'DELETE' });
+    if (!window.confirm('Are you sure you want to permanently delete ' + name + '? This cannot be undone.')) return;
+    await api('/models/' + id, { method: 'DELETE' });
     load();
   };
 
@@ -80,7 +80,7 @@ export default function StaffModels() {
             <p className="text-sm text-rose-600/70 dark:text-rose-300/70">{m.platforms}</p>
             {m.notes && <p className="text-xs text-rose-500 mt-2">{m.notes}</p>}
             <div className="flex gap-2 mt-4">
-              <button onClick={() => toggleLive(m.id)} className={⁠ btn flex-1 text-sm flex items-center justify-center gap-2 ${m.is_live ? 'btn-secondary' : 'btn-live'} ⁠}>
+              <button onClick={() => toggleLive(m.id)} className={'btn flex-1 text-sm flex items-center justify-center gap-2 ' + (m.is_live ? 'btn-secondary' : 'btn-live')}>
                 <Radio size={16} /> {m.is_live ? 'End Live' : 'Set Live'}
               </button>
               <button onClick={() => deleteModel(m.id, m.stage_name)} className="btn btn-danger text-sm flex items-center gap-1">
