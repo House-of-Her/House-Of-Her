@@ -22,8 +22,8 @@ export default function EOD() {
 
   const load = () => {
     setLoading(true);
-    api.get('/eod')
-      .then(r => setReports(r.data))
+    api('/eod')
+      .then(data => setReports(data))
       .catch(() => setReports([]))
       .finally(() => setLoading(false));
   };
@@ -33,9 +33,12 @@ export default function EOD() {
   const submit = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/eod', {
-        ...form,
-        overall_earnings: parseFloat(form.overall_earnings) || 0
+      await api('/eod', {
+        method: 'POST',
+        body: {
+          ...form,
+          overall_earnings: parseFloat(form.overall_earnings) || 0
+        }
       });
       setShowForm(false);
       setForm({
@@ -52,7 +55,7 @@ export default function EOD() {
       });
       load();
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to submit');
+      alert(err.message || 'Failed to submit');
     }
   };
 
