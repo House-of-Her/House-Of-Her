@@ -94,10 +94,7 @@ app.patch('/api/models/:id/live', authRequired, (req, res) => {
   broadcast({ type: 'live_status', model: model.stage_name, is_live: !!newLive, title });
 
 logActivity(req.user, 'Deleted model ' + model.stage_name, 'model', modelId);  res.json({ is_live: !!newLive, live_since: liveSince });
-});app.delete('/api/models/:id', authRequired, requireRole('admin'), (req, res) => {
-  const modelId = req.params.id;
-  const model = db.prepare('SELECT * FROM models WHERE id = ?').get(modelId);
-  if (!model) return res.status(404).json({ error: 'Model not found' });
+});
 
   // Delete related data
   db.prepare('DELETE FROM users WHERE model_id = ?').run(modelId);
