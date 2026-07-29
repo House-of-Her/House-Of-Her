@@ -76,7 +76,6 @@ app.post('/api/models', authRequired, requireRole('admin', 'staff'), (req, res) 
 
 app.patch('/api/models/:id/live', authRequired, (req, res) => {
   const modelId = req.params.id;
-  // Models can only toggle their own, staff/admin can toggle any
   if (req.user.role === 'model' && req.user.model_id !== modelId) {
     return res.status(403).json({ error: 'Forbidden' });
   }
@@ -88,23 +87,25 @@ app.patch('/api/models/:id/live', authRequired, (req, res) => {
   const liveSince = newLive ? new Date().toISOString() : null;
   db.prepare('UPDATE models SET is_live = ?, live_since = ? WHERE id = ?').run(newLive, liveSince, modelId);
 
-  // Notify staff/admin
   const title = newLive ? `🔴 ${model.stage_name} is now LIVE` : `${model.stage_name} ended live`;
   notifyStaff(title, `${model.stage_name} toggled live status`, 'live', `/models/${modelId}`);
   broadcast({ type: 'live_status', model: model.stage_name, is_live: !!newLive, title });
+  logActivity(req.user, title, 'model', modelId);
 
-logActivity(req.user, 'Deleted model ' + model.stage_name, 'model', modelId);  res.json({ is_live: !!newLive, live_since: liveSince });
+  res.json({ is_live: !!newLive, live_since: liveSince });
 });
-
   // Delete related data
-  db.prepare('DELETE FROM users WHERE model_id = ?').run(modelId);
-  db.prepare('DELETE FROM requests WHERE model_id = ?').run(modelId);
-  db.prepare('DELETE FROM content_uploads WHERE model_id = ?').run(modelId);
-  db.prepare('DELETE FROM voice_notes WHERE model_id = ?').run(modelId);
-  db.prepare('DELETE FROM invoices WHERE model_id = ?').run(modelId);
-  db.prepare('DELETE FROM models WHERE id = ?').run(modelId);
+db.prepare('DELETE FROM users WHERE model_id = ?').run(modelId);
+db.prepare('DELETE FROM requests WHERE model_id = ?').run(modelId);
+db.prepare('DELETE FROM content_uploads WHERE model_id = ?').run(modelId);
+db.prepare('DELETE FROM voice_notes WHERE model_id = ?').run(modelId);
+db.prepare('DELETE FROM invoices WHERE model_id = ?').run(modelId);
+db.prepare('DELETE FROM models WHERE id = ?').run(modelId);
 
-  logActivity(req.user, ⁠ Deleted model ${model.stage_name} ⁠, 'model', modelId);
+logActivity(req.user, 'Deleted model ' + model.stage_name, 'model', modelId);
+res.json({ ok: true });
+
+  logActivity(req.user, 'Deleted model ' + model.stage_name, 'model', modelId);;
   res.json({ ok: true });
 });
 
