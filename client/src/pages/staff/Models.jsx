@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../../lib/api';
-import { Plus, Radio } from 'lucide-react';
+import { Plus, Radio, Trash2 } from 'lucide-react';
 
 export default function StaffModels() {
   const [models, setModels] = useState([]);
@@ -14,11 +14,18 @@ export default function StaffModels() {
     e.preventDefault();
     await api('/models', { method: 'POST', body: form });
     setShow(false);
+    setForm({ stage_name: '', real_name: '', platforms: 'OnlyFans', email: '', password: 'model123' });
     load();
   };
 
   const toggleLive = async (id) => {
-    await api(`/models/${id}/live`, { method: 'PATCH' });
+    await api(⁠ /models/${id}/live ⁠, { method: 'PATCH' });
+    load();
+  };
+
+  const deleteModel = async (id, name) => {
+    if (!confirm(⁠ Are you sure you want to permanently delete ${name}? This cannot be undone. ⁠)) return;
+    await api(⁠ /models/${id} ⁠, { method: 'DELETE' });
     load();
   };
 
@@ -26,10 +33,12 @@ export default function StaffModels() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-rose-900">Models</h1>
-          <p className="text-rose-600/60 text-sm">Manage creators & live status</p>
+          <h1 className="text-2xl font-bold text-rose-900 dark:text-rose-100">Models</h1>
+          <p className="text-rose-600/60 dark:text-rose-300/60 text-sm">Manage creators & live status</p>
         </div>
-        <button onClick={() => setShow(!show)} className="btn btn-primary flex items-center gap-2"><Plus size={18} /> Add Model</button>
+        <button onClick={() => setShow(!show)} className="btn btn-primary flex items-center gap-2">
+          <Plus size={18} /> Add Model
+        </button>
       </div>
 
       {show && (
@@ -65,14 +74,19 @@ export default function StaffModels() {
         {models.map(m => (
           <div key={m.id} className="card p-5">
             <div className="flex items-center justify-between mb-3">
-              <div className="font-semibold text-lg text-rose-900">{m.stage_name}</div>
+              <div className="font-semibold text-lg text-rose-900 dark:text-rose-100">{m.stage_name}</div>
               {m.is_live ? <span className="badge badge-live">LIVE</span> : <span className="badge badge-pending">Offline</span>}
             </div>
-            <p className="text-sm text-rose-600/70">{m.platforms}</p>
+            <p className="text-sm text-rose-600/70 dark:text-rose-300/70">{m.platforms}</p>
             {m.notes && <p className="text-xs text-rose-500 mt-2">{m.notes}</p>}
-            <button onClick={() => toggleLive(m.id)} className={`btn mt-4 w-full text-sm flex items-center justify-center gap-2 ${m.is_live ? 'btn-secondary' : 'btn-live'}`}>
-              <Radio size={16} /> {m.is_live ? 'End Live' : 'Set Live'}
-            </button>
+            <div className="flex gap-2 mt-4">
+              <button onClick={() => toggleLive(m.id)} className={⁠ btn flex-1 text-sm flex items-center justify-center gap-2 ${m.is_live ? 'btn-secondary' : 'btn-live'} ⁠}>
+                <Radio size={16} /> {m.is_live ? 'End Live' : 'Set Live'}
+              </button>
+              <button onClick={() => deleteModel(m.id, m.stage_name)} className="btn btn-danger text-sm flex items-center gap-1">
+                <Trash2 size={16} />
+              </button>
+            </div>
           </div>
         ))}
       </div>
