@@ -159,7 +159,24 @@ export function initDb() {
       key TEXT PRIMARY KEY,
       value TEXT
     );
-  `);
+    CREATE TABLE IF NOT EXISTS eod_reports (
+      id TEXT PRIMARY KEY,
+      chatter_id TEXT NOT NULL,
+      chatter_name TEXT NOT NULL,
+      report_date TEXT NOT NULL,
+      shift_start TEXT,
+      shift_end TEXT,
+      models_worked TEXT,
+      overall_earnings REAL DEFAULT 0,
+      earnings_breakdown TEXT,
+      customs_updates TEXT,
+      important_followups TEXT,
+      problems_issues TEXT,
+      other_notes TEXT,
+      created_at TEXT DEFAULT (datetime('now')),
+      FOREIGN KEY (chatter_id) REFERENCES users(id)
+    );
+`);
 
   // Seed data if empty
   const userCount = db.prepare('SELECT COUNT(*) as c FROM users').get().c;
