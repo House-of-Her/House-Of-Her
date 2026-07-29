@@ -6,6 +6,7 @@ import ModelLayout from './components/ModelLayout';
 import StaffDashboard from './pages/staff/Dashboard';
 import StaffRequests from './pages/staff/Requests';
 import StaffContent from './pages/staff/Content';
+import EOD from './pages/EOD';
 import StaffAudits from './pages/staff/Audits';
 import StaffInvoices from './pages/staff/Invoices';
 import StaffModels from './pages/staff/Models';
@@ -35,7 +36,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      <Route path="/staff" element={<Protected staffOnly><StaffLayout /></Protected>}>
+            <Route path="/staff" element={<Protected staffOnly><StaffLayout /></Protected>}>
         <Route index element={<StaffDashboard />} />
         <Route path="requests" element={<StaffRequests />} />
         <Route path="content" element={<StaffContent />} />
@@ -45,6 +46,7 @@ export default function App() {
         <Route path="voice" element={<StaffVoice />} />
         <Route path="shifts" element={<StaffShifts />} />
         <Route path="calendar" element={<StaffCalendar />} />
+        <Route path="eod" element={<EOD />} />
       </Route>
       <Route path="/model" element={<Protected modelOnly><ModelLayout /></Protected>}>
         <Route index element={<ModelDashboard />} />
