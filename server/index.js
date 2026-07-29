@@ -503,6 +503,66 @@ function logActivity(user, action, entityType, entityId) {
 }
 
 // Health
+// ========== EOD REPORTS ==========
+app.get('/api/eod', authRequired, (req, res) => {
+  // All staff + chatters can see every report (handover)
+  if (req.user.role === 'model') {
+    return res.status(403).json({ error: 'Models cannot view EOD reports' });
+  }
+  const rows = db.prepare(`
+    SELECT * FROM eod_reports ORDER BY report_date DESC, created_at DESC
+  `).all();
+  res.json(rows);
+});
+
+app.post('/api/eod', authRequired, (req, res) => {
+  if (req.user.role === 'model') {
+    return res.status(403).json({ error: 'Models cannot create EOD reports' });
+  }
+
+  const {
+    report_date,
+    shift_start,
+    shift_end,
+    models_worked,
+    overall_earnings,
+    earnings_breakdown,
+    customs_updates,
+    important_followups,
+    problems_issues,
+    other_notes
+  } = req.body;
+
+  if (!report_date) {
+    return res.status(400).json({ error: 'Date is required' });
+  }
+
+  const id = 'eod_' + uuid().slice(0, 8);
+  db.prepare(`
+    INSERT INTO eod_reports (
+      id, chatter_id, chatter_name, report_date, shift_start, shift_end,
+      models_worked, overall_earnings, earnings_breakdown, customs_updates,
+      important_followups, problems_issues, other_notes
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    id,
+    req.user.id,
+    req.user.name,
+    report_date,
+    shift_start || null,
+    shift_end || null,
+    models_worked || null,
+    overall_earnings || 0,
+    earnings_breakdown || null,
+    customs_updates || null,
+    important_followups || null,
+    problems_issues || null,
+    other_notes || null
+  );
+
+  logActivity(req.user, 'Submitted EOD report', 'eod', id);
+  res.json({ id, ok: true });
+});
 app.get('/api/health', (req, res) => res.json({ status: 'ok', agency: 'House Of Her' }));
 
 // Ensure uploads dir
