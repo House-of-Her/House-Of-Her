@@ -6,7 +6,7 @@ export default function StaffAudits() {
   const [audits, setAudits] = useState([]);
   const [models, setModels] = useState([]);
   const [show, setShow] = useState(false);
-  const [form, setForm] = useState({ model_id: '', chatter_name: '', shift_date: '', score: 8, notes: '', flags: '' });
+const [form, setForm] = useState({ model_id: '', chatter_name: '', shift_date: '', notes: '', flags: '' });
 
   const load = () => {
     api('/audits').then(setAudits).catch(console.error);
@@ -26,7 +26,7 @@ export default function StaffAudits() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-rose-900">Chatter Audits</h1>
-          <p className="text-rose-600/60 text-sm">Score shifts and flag issues</p>
+          <p className="text-rose-600/60 text-sm">Review shifts and leave feedback</p>
         </div>
         <button onClick={() => setShow(!show)} className="btn btn-primary flex items-center gap-2"><Plus size={18} /> Log Audit</button>
       </div>
@@ -48,12 +48,8 @@ export default function StaffAudits() {
             <label className="label">Shift Date</label>
             <input className="input" type="date" value={form.shift_date} onChange={e => setForm({ ...form, shift_date: e.target.value })} />
           </div>
-          <div>
-            <label className="label">Score (1-10)</label>
-            <input className="input" type="number" min="1" max="10" value={form.score} onChange={e => setForm({ ...form, score: e.target.value })} />
-          </div>
           <div className="sm:col-span-2">
-            <label className="label">Notes / Flags</label>
+            <label className="label">Summary of Performance</label>
             <textarea className="input" value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} />
           </div>
           <div className="sm:col-span-2 flex gap-3">
@@ -70,7 +66,6 @@ export default function StaffAudits() {
               <th className="p-4">Chatter</th>
               <th className="p-4">Model</th>
               <th className="p-4">Date</th>
-              <th className="p-4">Score</th>
               <th className="p-4">Notes</th>
               <th className="p-4">By</th>
             </tr>
@@ -81,7 +76,6 @@ export default function StaffAudits() {
                 <td className="p-4 font-medium">{a.chatter_name}</td>
                 <td className="p-4">{a.model_name || '—'}</td>
                 <td className="p-4">{a.shift_date || '—'}</td>
-                <td className="p-4"><span className={`font-bold ${a.score >= 8 ? 'text-emerald-600' : a.score >= 5 ? 'text-amber-600' : 'text-rose-600'}`}>{a.score}/10</span></td>
                 <td className="p-4 text-rose-700 max-w-xs truncate">{a.notes}</td>
                 <td className="p-4">{a.staff_name}</td>
               </tr>
