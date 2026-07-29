@@ -16,6 +16,7 @@ const nav = [
   { to: '/staff/audits', icon: ShieldCheck, label: 'Chatter Audits' },
   { to: '/staff/invoices', icon: FileText, label: 'Invoices' },
   { to: '/staff/models', icon: Users, label: 'Models' },
+{ to: '/staff/eod', icon: FileText, label: 'EOD Report' },
 ];
 
 export default function StaffLayout() {
