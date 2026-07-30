@@ -8,15 +8,9 @@ import {
 
 const nav = [
   { to: '/staff', icon: LayoutDashboard, label: 'Overview', end: true },
-  { to: '/staff/shifts', icon: Clock, label: 'Shifts' },
-  { to: '/staff/requests', icon: ClipboardList, label: 'Requests' },
-  { to: '/staff/content', icon: FolderOpen, label: 'Content' },
-  { to: '/staff/calendar', icon: CalendarDays, label: 'Calendar' },
-  { to: '/staff/voice', icon: Mic, label: 'Voice Notes' },
-  { to: '/staff/audits', icon: ShieldCheck, label: 'Chatter Audits' },
-  { to: '/staff/invoices', icon: FileText, label: 'Invoices' },
   { to: '/staff/models', icon: Users, label: 'Models' },
   { to: '/staff/eod', icon: FileText, label: 'EOD Report' },
+  { to: '/staff/invoices', icon: FileText, label: 'Invoices' },
 ];
 
 class ErrorBoundary extends Component {

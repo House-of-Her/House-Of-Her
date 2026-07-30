@@ -36,17 +36,11 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-            <Route path="/staff" element={<Protected staffOnly><StaffLayout /></Protected>}>
+                  <Route path="/staff" element={<Protected staffOnly><StaffLayout /></Protected>}>
         <Route index element={<StaffDashboard />} />
-        <Route path="requests" element={<StaffRequests />} />
-        <Route path="content" element={<StaffContent />} />
-        <Route path="audits" element={<StaffAudits />} />
-        <Route path="invoices" element={<StaffInvoices />} />
         <Route path="models" element={<StaffModels />} />
-        <Route path="voice" element={<StaffVoice />} />
-        <Route path="shifts" element={<StaffShifts />} />
-        <Route path="calendar" element={<StaffCalendar />} />
         <Route path="eod" element={<EOD />} />
+        <Route path="invoices" element={<StaffInvoices />} />
       </Route>
       <Route path="/model" element={<Protected modelOnly><ModelLayout /></Protected>}>
         <Route index element={<ModelDashboard />} />
