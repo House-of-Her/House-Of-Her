@@ -115,14 +115,9 @@ export default function StaffLayout() {
         <header className="h-14 border-b border-rose-100 dark:border-gray-800 bg-white/70 dark:bg-gray-900/70 backdrop-blur sticky top-0 z-10 flex items-center justify-between px-6 md:px-8">
           <div className="text-sm text-rose-600/70 dark:text-rose-300/70">Agency Control Center</div>
           <div className="flex items-center gap-3">
-            <button className="p-2 rounded-full hover:bg-rose-50 dark:hover:bg-gray-800 text-rose-600 dark:text-rose-300 relative">
-              <Bell size={18} />
-              {unread > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-rose-500 text-white text-[10px] rounded-full flex items-center justify-center">
-                  {unread > 9 ? '9+' : unread}
-                </span>
-              )}
-            </button>
+           <button className="p-2 rounded-full hover:bg-rose-50 dark:hover:bg-gray-800 text-rose-600 dark:text-rose-300">
+  <Bell size={18} />
+</button>
           </div>
         </header>
         <div className="p-4 md:p-8">
