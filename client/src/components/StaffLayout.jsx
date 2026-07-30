@@ -57,31 +57,6 @@ export default function StaffLayout() {
     localStorage.setItem('hoh_dark', dark ? '1' : '0');
   }, [dark]);
 
-  // Real-time SSE
-  useEffect(() => {
-    const token = localStorage.getItem('hoh_token');
-    if (!token) return;
-    const es = new EventSource(`/api/events?token=${token}`); // note: simple; in prod pass via header or cookie
-    // Because EventSource can't set Authorization easily, we use a simple poll fallback + manual
-    // Better: use fetch stream or reconnect with query. For MVP we poll notifications.
-    return () => es.close();
-  }, []);
-
-  // Poll notifications for unread count + toast on new live events
-  useEffect(() => {
-    const check = () => {
-      fetch('/api/notifications', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('hoh_token')}` }
-      }).then(r => r.json()).then(data => {
-        const unreadCount = data.filter(n => !n.read).length;
-        setUnread(unreadCount);
-      }).catch(() => {});
-    };
-    check();
-    const id = setInterval(check, 15000);
-    return () => clearInterval(id);
-  }, []);
-
   return (
     <div className="min-h-screen flex bg-rose-50 dark:bg-gray-950">
       <aside className="w-60 bg-white/90 dark:bg-gray-900/95 border-r border-rose-100 dark:border-gray-800 flex flex-col fixed h-full z-20">
